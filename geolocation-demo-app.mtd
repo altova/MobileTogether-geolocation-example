@@ -1,0 +1,1198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MobileTogetherDesign versionClient="50" versionServer="50" deploymentPath_so="/public/geolocation demo" deploymentDescription_so="This app captures geolocation data, looks up USGS elevation using REST, displays results, saves and emails GPX files." deploymentGlobalResourceConfig_so="Default">
+	<DesignRoot id="6">
+		<style onSwitchToOtherSolution="suspend" serverAccess="ondemand" workflowIcon="globe.png"/>
+		<children>
+			<DesignPage id="7" name="Geolocation App">
+				<style autoAddSubmitButton="0"/>
+				<children>
+					<DesignLabel id="339">
+						<style align="center" margin="4" multiLine="1" name="Label1" text="Geolocation Demo App" textSize="medium" visible_x="CurrentState() = 0" weight="1"/>
+					</DesignLabel>
+					<DesignLabel id="340">
+						<style margin="4" multiLine="1" name="Label2" text_x="&apos;This app reads geolocation data, gets elevation from USGS REST Web Service, and reports interesting data.&apos;" visible_x="CurrentState() = 0"/>
+					</DesignLabel>
+					<DesignLabel id="1998">
+						<style align="center" margin="3" marginBottom="0" name="Label10" text="Last Known Location" textSize="medium" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="663">
+						<children>
+							<DesignTableCol id="664"/>
+							<DesignTableCol id="665"/>
+							<DesignTableRow id="666">
+								<children>
+									<DesignLabel id="667">
+										<style align="center" name="Label3" text="Latitude"/>
+									</DesignLabel>
+									<DesignLabel id="671">
+										<style align="center" name="Label4" text="Longitude"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="675">
+								<children>
+									<DesignLabel id="676" pageXML="983">
+										<style align="center" format="0.####" name="Label5" valign="bottom"/>
+									</DesignLabel>
+									<DesignLabel id="680" pageXML="984">
+										<style align="center" format="0.####" name="Label6" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1207">
+								<children>
+									<DesignLabel id="1203">
+										<style align="center" marginTop="8" multiLine="1" name="Label14" text_x="concat(&apos;Elevation (&apos;, $PERSISTENT/Root/environment/units, &apos;):&apos;)" valign="bottom"/>
+									</DesignLabel>
+									<DesignLabel id="1205">
+										<style align="center" marginTop="8" multiLine="1" name="Label15" text_x="if 
+  ( $PERSISTENT/Root/mainDisplay/USGSelevation != &apos;Unavailable&apos; ) 
+then 
+mt-format-number($PERSISTENT/Root/mainDisplay/USGSelevation, &apos;#0.00&apos;)
+
+else 
+  $PERSISTENT/Root/mainDisplay/USGSelevation" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="994">
+								<children>
+									<DesignLabel id="995">
+										<style align="center" marginTop="8" multiLine="1" name="Label8" text="Capture time (hh:mm:ss):" valign="bottom"/>
+									</DesignLabel>
+									<DesignLabel id="1003" pageXML="1000">
+										<style align="center" dtFormat="[H01]:[m01]:[s01]" marginTop="8" multiLine="1" name="Label9" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1430">
+								<children>
+									<DesignLabel id="1426">
+										<style align="center" marginTop="8" multiLine="1" name="Label12" text="Source:" valign="middle"/>
+									</DesignLabel>
+									<DesignLabel id="1428" pageXML="1425">
+										<style align="center" name="Label13" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignHLine id="1582">
+						<style name="Horizontal Line1"/>
+					</DesignHLine>
+					<DesignTable id="1704">
+						<style marginTop="5" repeating="0" visible_x="$PERSISTENT/Root/mainDisplay/showAddress = &apos;true&apos;"/>
+						<children>
+							<DesignTableCol id="1705"/>
+							<DesignTableRowGroup id="1706" pageXML="658">
+								<style addDelPossible="0"/>
+								<children>
+									<DesignTableRow id="1707">
+										<children>
+											<DesignLabel id="1708" pageXML="658">
+												<style align="center" multiLine="1" name="Label7"/>
+											</DesignLabel>
+										</children>
+									</DesignTableRow>
+								</children>
+							</DesignTableRowGroup>
+						</children>
+					</DesignTable>
+					<DesignButton id="1710">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="Show / Hide Address button" text_x="if ( $PERSISTENT/Root/mainDisplay/showAddress = &apos;true&apos; ) then &apos;Hide Address&apos; else &apos;Show Address&apos;" textColor="blue" textSize="medium" visible_x="CurrentState() = 1" weight="1"/>
+						<controlActions id="1711" needsClient="0">
+							<children>
+								<DesignActionCondition id="1714" needsClient="1" condition="$PERSISTENT/Root/mainDisplay/displayLat != &apos;&apos;">
+									<children>
+										<DesignActionConditionTrue id="1715">
+											<children>
+												<DesignActionCondition id="1716" needsClient="1" condition="$PERSISTENT/Root/mainDisplay/showAddress = &apos;true&apos;">
+													<children>
+														<DesignActionConditionTrue id="1717">
+															<children>
+																<DesignActionUpdateNode id="1718" updAt="$PERSISTENT/Root/mainDisplay/showAddress" resOf="&apos;false&apos;"/>
+															</children>
+														</DesignActionConditionTrue>
+														<DesignActionConditionFalse id="1719">
+															<children>
+																<DesignActionUpdateNode id="1720" updAt="$PERSISTENT/Root/mainDisplay/showAddress" resOf="&apos;true&apos;"/>
+															</children>
+														</DesignActionConditionFalse>
+													</children>
+												</DesignActionCondition>
+											</children>
+										</DesignActionConditionTrue>
+									</children>
+								</DesignActionCondition>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignButton id="1721">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="Show Map button" text="Map " textColor="blue" textSize="medium" visible_x="CurrentState() = 1" weight="1"/>
+						<controlActions id="1722" needsClient="0">
+							<children>
+								<DesignActionShowGeolocationInMap id="1725" location="$GEOLOCATION/Root/Location/@Geolocation" label="&apos;Latest Point&apos;" zoom="$PERSISTENT/Root/environment/mapZoom"/>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignHLine id="1728">
+						<style name="Horizontal Line4" visible_x="CurrentState() = 1"/>
+					</DesignHLine>
+					<DesignLabel id="1560">
+						<style align="center" margin="3" marginBottom="5" marginTop="10" multiLine="1" name="Label16" text="GPS Tracking Status" textSize="medium" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="1903">
+						<children>
+							<DesignTableCol id="1904"/>
+							<DesignTableRow id="1905">
+								<children>
+									<DesignRadioButton id="1899" pageXML="1501" checkedValues="off" checkedValues1="0">
+										<style cbRight="0" name="Radio Button5" text=" Off             "/>
+										<controlActions id="1900" needsClient="0">
+											<children>
+												<DesignActionUpdateNode id="1901" updAt="$PERSISTENT/Root/gpsStatus/GPS_on" resOf="0"/>
+												<DesignActionGeolocationStop id="1902" needsClient="0"/>
+											</children>
+										</controlActions>
+									</DesignRadioButton>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignTable id="1457">
+						<style align="center"/>
+						<children>
+							<DesignTableCol id="1574">
+								<style colWidth="wrap_content"/>
+							</DesignTableCol>
+							<DesignTableCol id="1458"/>
+							<DesignTableRow id="1461">
+								<children>
+									<DesignRadioButton id="1569" pageXML="1501" checkedValues="2">
+										<style cbRight="0" name="Radio Button4" text=" GPS     " valign="middle"/>
+										<controlActions id="1570" needsClient="0">
+											<children>
+												<DesignActionGeolocationStart id="1571" needsClient="0" provider="gps"/>
+												<DesignActionUpdateNode id="1572" updAt="$PERSISTENT/Root/gpsStatus/GPS_on" resOf="2"/>
+												<DesignActionUpdateNode id="1573" updAt="$PERSISTENT/Root/mainDisplay/showAddress" resOf="&apos;false&apos;"/>
+											</children>
+										</controlActions>
+									</DesignRadioButton>
+									<DesignRadioButton id="1462" pageXML="1501" checkedValues="3">
+										<style cbRight="0" name="Radio Button3" text=" GPS + Network  " valign="middle"/>
+										<controlActions id="1463" needsClient="0">
+											<children>
+												<DesignActionGeolocationStart id="1471" needsClient="0"/>
+												<DesignActionUpdateNode id="1472" updAt="$PERSISTENT/Root/gpsStatus/GPS_on" resOf="3"/>
+												<DesignActionUpdateNode id="1566" updAt="$PERSISTENT/Root/mainDisplay/showAddress" resOf="&apos;false&apos;"/>
+											</children>
+										</controlActions>
+									</DesignRadioButton>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignButton id="1489">
+						<style align="center" backgroundColor_x="if ( $PERSISTENT/Root/gpsStatus/capturing = 1 ) 
+then &apos;#F4F444&apos; 
+else &apos;#D7D7DB&apos;" margin="10" multiLine="1" name="Capture Location Button" text_x="&apos;
+
+Update Location
+
+
+&apos;" textColor="blue" textSize="large" visible_x="$PERSISTENT/Root/gpsStatus/GPS_on &gt; 0" weight="1"/>
+						<controlActions id="1490" needsClient="0">
+							<children>
+								<DesignActionUpdateNode id="1908" updAt="$PERSISTENT/Root/gpsStatus/capturing" resOf="1"/>
+								<DesignActionUpdateDisplay id="1911" needsClient="0"/>
+								<DesignActionGroupRef id="1495" groupRef="1038"/>
+								<DesignActionUpdateNode id="2110" updAt="$PERSISTENT/Root/gpsStatus/GPS_on" resOf="0"/>
+								<DesignActionGeolocationStop id="2109" needsClient="0"/>
+								<DesignActionUpdateNode id="1910" updAt="$PERSISTENT/Root/gpsStatus/capturing" resOf="0"/>
+								<DesignActionGroupRef id="1496" groupRef="1180"/>
+								<DesignActionGroupRef id="1804" groupRef="1797"/>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignHLine id="1586">
+						<style marginBottom="5" marginTop="5" name="Horizontal Line3" visible_x="$PERSISTENT/Root/gpsStatus/GPS_on = 0"/>
+					</DesignHLine>
+					<DesignLabel id="2002">
+						<style align="center" margin="3" marginBottom="0" name="Label11" text="Previous Location" textSize="medium" visible_x="CurrentState() = 1" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="1620">
+						<style visible_x="CurrentState() = 1"/>
+						<children>
+							<DesignTableCol id="1621"/>
+							<DesignTableCol id="1622"/>
+							<DesignTableRow id="1623">
+								<children>
+									<DesignLabel id="1624">
+										<style align="center" name="Label18" text="Latitude" underline="0"/>
+										<controlActions id="1625" needsClient="0">
+											<children>
+												<DesignActionShowGeolocationInMap id="2105" location="$PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation" label="&apos;Previous Location&apos;" zoom="$PERSISTENT/Root/environment/mapZoom"/>
+											</children>
+										</controlActions>
+									</DesignLabel>
+									<DesignLabel id="1626">
+										<style align="center" name="Label19" text="Longitude" underline="0"/>
+										<controlActions id="1627" needsClient="0">
+											<children>
+												<DesignActionShowGeolocationInMap id="2104" location="$PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation" label="&apos;Previous Location&apos;" zoom="$PERSISTENT/Root/environment/mapZoom"/>
+											</children>
+										</controlActions>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1628">
+								<children>
+									<DesignLabel id="1629" pageXML="1589">
+										<style align="center" format="0.####" name="Label20" underline="0"/>
+										<controlActions id="1630" needsClient="0">
+											<children>
+												<DesignActionShowGeolocationInMap id="2108" location="$PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation" label="&apos;Previous Location&apos;" zoom="$PERSISTENT/Root/environment/mapZoom"/>
+											</children>
+										</controlActions>
+									</DesignLabel>
+									<DesignLabel id="1631" pageXML="1590">
+										<style align="center" format="0.####" name="Label21" underline="0"/>
+										<controlActions id="1632" needsClient="0">
+											<children>
+												<DesignActionShowGeolocationInMap id="2107" location="$PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation" label="&apos;Previous Location&apos;" zoom="$PERSISTENT/Root/environment/mapZoom"/>
+											</children>
+										</controlActions>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1633">
+								<children>
+									<DesignLabel id="1634">
+										<style align="center" marginTop="8" multiLine="1" name="Label22" text_x="concat(&apos;Elevation (&apos;, $PERSISTENT/Root/environment/units, &apos;):&apos;)"/>
+									</DesignLabel>
+									<DesignLabel id="1636">
+										<style align="center" marginTop="8" multiLine="1" name="Label23" text_x="if 
+  ( $PERSISTENT/Root/mainDisplay/previousLocation/prevElevation != &apos;Unavailable&apos; ) 
+then 
+mt-format-number($PERSISTENT/Root/mainDisplay/previousLocation/prevElevation, &apos;#0.00&apos;)
+else 
+  $PERSISTENT/Root/mainDisplay/previousLocation/prevElevation"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1638">
+								<children>
+									<DesignLabel id="1639">
+										<style align="center" marginTop="8" multiLine="1" name="Label24" text="Capture time (hh:mm:ss):" valign="bottom"/>
+									</DesignLabel>
+									<DesignLabel id="1641" pageXML="1001">
+										<style align="center" dtFormat="[H01]:[m01]:[s01]" marginTop="8" multiLine="1" name="Label25" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="2010">
+								<children>
+									<DesignLabel id="2007">
+										<style align="center" marginTop="8" multiLine="1" name="Label28" text="Elapsed time (hh:mm:ss):" valign="bottom"/>
+									</DesignLabel>
+									<DesignLabel id="2013">
+										<style align="center" dtFormat="[H01]:[m01]:[s01]" name="Label29" text_x="xs:dateTime($PERSISTENT/Root/mainDisplay/latestCaptureTime) - xs:dateTime($PERSISTENT/Root/mainDisplay/previousLocation/prevCaptureTime)" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1643">
+								<children>
+									<DesignLabel id="1644">
+										<style align="center" marginTop="8" multiLine="1" name="Label26" text_x="concat ( &apos;Distance (&apos;,
+if ( $PERSISTENT/Root/environment/units = &apos;Feet&apos; ) then &apos;Miles&apos; else &apos;KM&apos; , &apos;):&apos; )" valign="middle"/>
+									</DesignLabel>
+									<DesignLabel id="1646" pageXML="1601">
+										<style align="center" format="#,##0.00" name="Label27" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignHLine id="1648">
+						<style name="Horizontal Line5" visible_x="CurrentState() = 1"/>
+					</DesignHLine>
+					<DesignButton id="1502">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="Details Button" text="Details" textColor="blue" textSize="medium" visible_x="CurrentState() = 1" weight="1"/>
+						<controlActions id="1503" needsClient="0">
+							<children>
+								<DesignActionGotoSubpage id="1506" needsClient="0" showLoadSubpageMsg="0" showCloseSubpageMsg="0" pageRef="753"/>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignButton id="1818">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="Files button" text="Settings" textColor="blue" textSize="medium" visible_x="$PERSISTENT/Root/gpsStatus/GPS_on = 0" weight="1"/>
+						<controlActions id="1819" needsClient="0">
+							<children>
+								<DesignActionGotoPage id="1981" showLoadToppageMsg="0" processRef="1983"/>
+							</children>
+						</controlActions>
+					</DesignButton>
+				</children>
+				<onPageLoadActions id="16">
+					<children>
+						<DesignActionCondition id="1990" condition="$PERSISTENT/Root/environment/returnFromFilesPage = 0">
+							<children>
+								<DesignActionConditionTrue id="1991">
+									<children>
+										<DesignActionGroupRef id="1988" groupRef="1858"/>
+										<DesignActionGroupRef id="1989" groupRef="1077"/>
+									</children>
+								</DesignActionConditionTrue>
+								<DesignActionConditionFalse id="1992">
+									<children>
+										<DesignActionUpdateNode id="1993" updAt="$PERSISTENT/Root/environment/returnFromFilesPage" resOf="0"/>
+									</children>
+								</DesignActionConditionFalse>
+							</children>
+						</DesignActionCondition>
+					</children>
+				</onPageLoadActions>
+				<onPageRefreshActions id="151" needsClient="0" timerSeconds="$PERSISTENT/Root/autoUpdateTimer"/>
+				<xmlRoots>
+					<PageXMLRootRef id="1048" refXMLRoot="1049"/>
+					<PageXMLRootRef id="1780" refXMLRoot="1781"/>
+				</xmlRoots>
+			</DesignPage>
+			<DesignPage id="753" subPage="1" name="Details">
+				<children>
+					<DesignLabel id="686">
+						<style align="center" margin="4" name="Label1" text="Location" textSize="large" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="755">
+						<children>
+							<DesignTableCol id="756">
+								<style colWidth="35"/>
+							</DesignTableCol>
+							<DesignTableCol id="757"/>
+							<DesignTableRow id="758">
+								<children>
+									<DesignLabel id="687">
+										<style align="left" marginTop="3" multiLine="1" name="Label2" text="Provider" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="718" pageXML="634">
+										<style align="left" marginTop="3" multiLine="1" name="Label12" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="761">
+								<children>
+									<DesignLabel id="691">
+										<style align="left" marginTop="3" multiLine="1" name="Label3" text="Latitude" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="721" pageXML="635">
+										<style align="left" marginTop="3" multiLine="1" name="Label13" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="766">
+								<children>
+									<DesignLabel id="694">
+										<style align="left" marginTop="3" multiLine="1" name="Label4" text="Longitude" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="724" pageXML="636">
+										<style align="left" marginTop="3" multiLine="1" name="Label14" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="771">
+								<children>
+									<DesignLabel id="697">
+										<style align="left" marginTop="3" multiLine="1" name="Label5" text="Geolocation" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="727" pageXML="637">
+										<style align="left" marginTop="3" multiLine="1" name="Label15" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="776">
+								<children>
+									<DesignLabel id="700">
+										<style align="left" marginTop="3" multiLine="1" name="Label6" text="Altitude" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="730" pageXML="638">
+										<style align="left" marginTop="3" multiLine="1" name="Label16" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="781">
+								<children>
+									<DesignLabel id="703">
+										<style align="left" marginTop="3" multiLine="1" name="Label7" text="Accuracy Vertical" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="733" pageXML="639">
+										<style align="left" marginTop="3" multiLine="1" name="Label17" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="786">
+								<children>
+									<DesignLabel id="706">
+										<style align="left" marginTop="3" multiLine="1" name="Label8" text="Accuracy Horizontal" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="736" pageXML="640">
+										<style align="left" marginTop="3" multiLine="1" name="Label18" valign="bottom"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="791">
+								<children>
+									<DesignLabel id="709">
+										<style align="left" marginTop="3" multiLine="1" name="Label9" text="Speed" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="739" pageXML="641">
+										<style align="left" marginTop="3" multiLine="1" name="Label19" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="796">
+								<children>
+									<DesignLabel id="712">
+										<style align="left" marginTop="3" multiLine="1" name="Label10" text="Time" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="742" pageXML="642">
+										<style align="left" marginTop="3" multiLine="1" name="Label20" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="801">
+								<children>
+									<DesignLabel id="715">
+										<style align="left" marginTop="3" multiLine="1" name="Label11" text="Magnetic Heading" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="745" pageXML="643">
+										<style align="left" marginTop="3" multiLine="1" name="Label21" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignLabel id="749">
+						<style align="center" margin="4" name="Label22" text="Address" textSize="large" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="895">
+						<children>
+							<DesignTableCol id="896">
+								<style colWidth="wrap_content"/>
+							</DesignTableCol>
+							<DesignTableCol id="897"/>
+							<DesignTableRow id="898">
+								<children>
+									<DesignLabel id="817">
+										<style align="left" marginTop="3" multiLine="1" name="Label23" text="Locality" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="871" pageXML="645">
+										<style align="left" marginTop="3" multiLine="1" name="Label37" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="902">
+								<children>
+									<DesignLabel id="846">
+										<style align="left" marginTop="3" multiLine="1" name="Label25" text="Sublocality" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="873" pageXML="646">
+										<style align="left" marginTop="3" multiLine="1" name="Label38" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="907">
+								<children>
+									<DesignLabel id="848">
+										<style align="left" marginTop="3" multiLine="1" name="Label26" text="CountryName" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="875" pageXML="647">
+										<style align="left" marginTop="3" multiLine="1" name="Label39" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="912">
+								<children>
+									<DesignLabel id="850">
+										<style align="left" marginTop="3" multiLine="1" name="Label27" text="CountryCode" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="877" pageXML="648">
+										<style align="left" marginTop="3" multiLine="1" name="Label40" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="917">
+								<children>
+									<DesignLabel id="852">
+										<style align="left" marginTop="3" multiLine="1" name="Label28" text="PostalCode" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="879" pageXML="649">
+										<style align="left" marginTop="3" multiLine="1" name="Label41" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="922">
+								<children>
+									<DesignLabel id="854">
+										<style align="left" marginTop="3" multiLine="1" name="Label29" text="AdminArea" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="881" pageXML="650">
+										<style align="left" marginTop="3" multiLine="1" name="Label42" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="927">
+								<children>
+									<DesignLabel id="856">
+										<style align="left" marginTop="3" multiLine="1" name="Label30" text="SubAdminArea" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="883" pageXML="651">
+										<style align="left" marginTop="3" multiLine="1" name="Label43" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="932">
+								<children>
+									<DesignLabel id="858">
+										<style align="left" marginTop="3" multiLine="1" name="Label31" text="FeatureName" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="885" pageXML="652">
+										<style align="left" marginTop="3" multiLine="1" name="Label44" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="937">
+								<children>
+									<DesignLabel id="860">
+										<style align="left" marginTop="3" multiLine="1" name="Label32" text="Thoroughfare" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="887" pageXML="653">
+										<style align="left" marginTop="3" multiLine="1" name="Label45" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="942">
+								<children>
+									<DesignLabel id="862">
+										<style align="left" marginTop="3" multiLine="1" name="Label33" text="SubThoroughfare  " valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="889" pageXML="654">
+										<style align="left" marginTop="3" multiLine="1" name="Label46" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="947">
+								<children>
+									<DesignLabel id="864">
+										<style align="left" marginTop="3" multiLine="1" name="Label34" text="Phone" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="891" pageXML="655">
+										<style align="left" marginTop="3" multiLine="1" name="Label47" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="952">
+								<children>
+									<DesignLabel id="866">
+										<style align="left" marginTop="3" multiLine="1" name="Label35" text="Url" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="893" pageXML="656">
+										<style align="left" marginTop="3" multiLine="1" name="Label48" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="957">
+								<children>
+									<DesignLabel id="868">
+										<style align="left" marginTop="3" multiLine="1" name="Label36" text="Premises" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="844" pageXML="657">
+										<style align="left" marginTop="3" multiLine="1" name="Label24" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignLabel id="1105">
+						<style align="center" margin="4" name="Label49" text="USGS" textSize="large" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="1138">
+						<children>
+							<DesignTableCol id="1139">
+								<style colWidth="wrap_content"/>
+							</DesignTableCol>
+							<DesignTableCol id="1140"/>
+							<DesignTableRow id="1141">
+								<children>
+									<DesignLabel id="1108">
+										<style align="left" marginTop="3" multiLine="1" name="Label50" text="x" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="1113" pageXML="1100">
+										<style align="left" marginTop="3" multiLine="1" name="Label52" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1146">
+								<children>
+									<DesignLabel id="1116">
+										<style align="left" marginTop="3" multiLine="1" name="Label53" text="y" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="1128" pageXML="1101">
+										<style align="left" marginTop="3" multiLine="1" name="Label57" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1151">
+								<children>
+									<DesignLabel id="1119">
+										<style align="left" marginTop="3" multiLine="1" name="Label54" text="Data_Source  " valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="1131" pageXML="1102">
+										<style align="left" marginTop="3" multiLine="1" name="Label58" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1156">
+								<children>
+									<DesignLabel id="1122">
+										<style align="left" marginTop="3" multiLine="1" name="Label55" text="Elevation" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="1134" pageXML="1103">
+										<style align="left" marginTop="3" multiLine="1" name="Label59" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+							<DesignTableRow id="1161">
+								<children>
+									<DesignLabel id="1125">
+										<style align="left" marginTop="3" multiLine="1" name="Label56" text="Units" valign="top"/>
+									</DesignLabel>
+									<DesignLabel id="1111" pageXML="1104">
+										<style align="left" marginTop="3" multiLine="1" name="Label51" valign="top"/>
+									</DesignLabel>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+				</children>
+				<onBackButtonActions id="813" needsClient="0">
+					<children>
+						<DesignActionReturnFromSubpage id="814" needsClient="0"/>
+					</children>
+				</onBackButtonActions>
+				<xmlRoots>
+					<PageXMLRootRef id="1166" refXMLRoot="1049"/>
+				</xmlRoots>
+			</DesignPage>
+			<DesignPage id="1809" name="Settings">
+				<style autoAddSubmitButton="1"/>
+				<children>
+					<DesignHLine id="2063">
+						<style name="Horizontal Line2"/>
+					</DesignHLine>
+					<DesignLabel id="2065">
+						<style align="center" margin="3" marginBottom="5" marginTop="10" name="Label17" text="Elevation Units" textSize="medium" weight="1"/>
+					</DesignLabel>
+					<DesignTable id="2067">
+						<style align="center" marginTop="0"/>
+						<children>
+							<DesignTableCol id="2068">
+								<style colWidth="wrap_content"/>
+							</DesignTableCol>
+							<DesignTableCol id="2069">
+								<style colWidth="wrap_content"/>
+							</DesignTableCol>
+							<DesignTableRow id="2070">
+								<children>
+									<DesignRadioButton id="2071" pageXML="1215" checkedValues="Feet" checkedValues1="1">
+										<style cbRight="0" enabled="1" name="Radio Button1" text=" Feet            "/>
+										<controlActions id="2072" needsClient="0">
+											<children>
+												<DesignActionUpdateNode id="2073" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevElevation" resOf="ConvertToFeet( $PERSISTENT/Root/mainDisplay/previousLocation/prevElevation )"/>
+												<DesignActionUpdateNode id="2074" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevUnits" resOf="&apos;Feet&apos;"/>
+												<DesignActionGroupRef id="2075" groupRef="1180"/>
+												<DesignActionGroupRef id="2076" groupRef="1611"/>
+											</children>
+										</controlActions>
+									</DesignRadioButton>
+									<DesignRadioButton id="2077" pageXML="1215" checkedValues="Meters" checkedValues1="1">
+										<style align="left" cbRight="0" name="Radio Button2" text=" Meters     "/>
+										<controlActions id="2078" needsClient="0">
+											<children>
+												<DesignActionUpdateNode id="2079" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevElevation" resOf="ConvertToMeters($PERSISTENT/Root/mainDisplay/previousLocation/prevElevation)"/>
+												<DesignActionUpdateNode id="2080" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevUnits" resOf="&apos;Meters&apos;"/>
+												<DesignActionGroupRef id="2081" groupRef="1180"/>
+												<DesignActionGroupRef id="2082" groupRef="1611"/>
+											</children>
+										</controlActions>
+									</DesignRadioButton>
+								</children>
+							</DesignTableRow>
+						</children>
+					</DesignTable>
+					<DesignHLine id="2083">
+						<style marginBottom="5" marginTop="5" name="Horizontal Line5"/>
+					</DesignHLine>
+					<DesignTable id="2124">
+						<children>
+							<DesignTableCol id="2125"/>
+							<DesignTableCol id="2126"/>
+							<DesignTableRow id="2127">
+								<children>
+									<DesignLabel id="2128">
+										<style margin="10" multiLine="1" name="Label2" text="Default map zoom:" weight="1"/>
+									</DesignLabel>
+									<DesignCombo id="2130" pageXML="2111">
+										<style align="center" name="map zoom Combo Box"/>
+										<comboEntry desc="" value="1"/>
+										<comboEntry desc="" value="5"/>
+										<comboEntry desc="" value="10"/>
+										<comboEntry desc="" value="15"/>
+										<comboEntry desc="" value="20"/>
+									</DesignCombo>
+								</children>
+							</DesignTableRow>
+						</children>
+						<appliedVar ref="47"/>
+						<appliedVar ref="46"/>
+					</DesignTable>
+					<DesignHLine id="2132">
+						<style name="Horizontal Line1"/>
+						<appliedVar ref="47"/>
+						<appliedVar ref="46"/>
+					</DesignHLine>
+					<DesignLabel id="1849">
+						<style margin="2" multiLine="1" name="Label1" text="Manage GPX data for the points you have recorded." visible_x="CurrentState() &lt; 2"/>
+						<appliedVar ref="42"/>
+						<appliedVar ref="43"/>
+					</DesignLabel>
+					<DesignButton id="1824">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="Send Email button" text="Email GPX file" textColor="blue" textSize="medium" visible_x="CurrentState() &lt; 2" weight="1"/>
+						<appliedVar ref="42"/>
+						<appliedVar ref="43"/>
+						<controlActions id="1825" needsClient="0">
+							<children>
+								<DesignActionCondition id="2102" condition="( contains( $PERSISTENT/Root/environment/device_platform ,  &apos;iOS&apos;) or contains( $PERSISTENT/Root/environment/device_platform , &apos;Android&apos; )  )">
+									<children>
+										<DesignActionConditionTrue id="2103">
+											<children>
+												<DesignActionEmail id="2101" subject="concat(&apos;GPX data on: &apos;, current-dateTime-no-TZ() )" body="&apos;Your gpx data is attached&apos;" attachments="mt-email-attachment( concat(current-dateTime-no-TZ(),&apos;.gpx&apos;) ,$XML1/ns1:gpx , &quot;xml&quot;)"/>
+											</children>
+										</DesignActionConditionTrue>
+									</children>
+								</DesignActionCondition>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignButton id="1830">
+						<style align="center" backgroundColor="#D7D7DB" margin="10" name="New GPX File Button" text="New GPX File" textColor="blue" textSize="medium" visible_x="CurrentState() &lt; 2" weight="1"/>
+						<appliedVar ref="42"/>
+						<appliedVar ref="43"/>
+						<controlActions id="1831" needsClient="0">
+							<children>
+								<DesignActionMessageBox id="1838" needsClient="0" msgBoxKind="okcancel" msgBoxTitle="&apos;Please Confirm&apos;" msgBoxMsg="&apos;This will erase all stored points and create an empty GPX file.&apos;">
+									<children>
+										<DesignActionMessageBoxButton id="1839" needsClient="0">
+											<children>
+												<DesignActionDeleteNode id="1846" delAt="$XML1/ns1:gpx/ns1:trk/ns1:trkseg"/>
+												<DesignActionAppendNode id="1848" appAt="$XML1/ns1:gpx/ns1:trk" resOf="$PERSISTENT/Root/gpxFileNodes/trkseg"/>
+												<DesignActionUpdateNode id="1854" updAt="$XML1/ns1:gpx/ns1:metadata/ns1:time" resOf="current-dateTime-no-TZ()"/>
+											</children>
+										</DesignActionMessageBoxButton>
+										<DesignActionMessageBoxButton id="1840" needsClient="0"/>
+									</children>
+								</DesignActionMessageBox>
+							</children>
+						</controlActions>
+					</DesignButton>
+					<DesignHLine id="2087">
+						<style marginBottom="5" marginTop="5" name="Horizontal Line6" visible_x="$PERSISTENT/Root/gpsStatus/GPS_on = 0"/>
+						<appliedVar ref="42"/>
+						<appliedVar ref="43"/>
+					</DesignHLine>
+				</children>
+				<onBackButtonActions id="357" needsClient="0">
+					<children>
+						<DesignActionUpdateNode id="1984" updAt="$PERSISTENT/Root/environment/returnFromFilesPage" resOf="1"/>
+						<DesignActionGotoPage id="1982" showLoadToppageMsg="0" processRef="34"/>
+					</children>
+				</onBackButtonActions>
+				<onSubmitButtonActions id="365" needsClient="0">
+					<children>
+						<DesignActionUpdateNode id="1986" updAt="$PERSISTENT/Root/environment/returnFromFilesPage" resOf="1"/>
+						<DesignActionGotoPage id="1987" showLoadToppageMsg="0" processRef="34"/>
+					</children>
+				</onSubmitButtonActions>
+				<xmlRoots>
+					<PageXMLRootRef id="1845" refXMLRoot="1781"/>
+					<PageXMLRootRef id="2091" refXMLRoot="1049"/>
+				</xmlRoots>
+			</DesignPage>
+		</children>
+	</DesignRoot>
+	<ActionGroupRoot id="253">
+		<children>
+			<DesignActionGroup id="1858" name="Get Device Info">
+				<children>
+					<DesignActionUpdateNode id="1857" updAt="$PERSISTENT/Root/environment/device_platform" resOf="if ( $MT_Android ) then &apos;Android device&apos; 
+else if ( $MT_iOS ) then &apos;iOS device&apos;
+else if ($MT_Windows) then &apos;Windows App&apos;
+else if ($MT_WindowsPhone) then &apos;Windows Phone&apos;
+else if ( $MT_Browser ) then &apos;Web Browser&apos;
+else &apos;Unknown device&apos;"/>
+				</children>
+			</DesignActionGroup>
+			<DesignActionGroup id="1077" name="Initialize Persistent">
+				<children>
+					<DesignActionUpdateNode id="1079" updAt="$PERSISTENT/Root/mainDisplay/showAddress" resOf="&apos;false&apos;"/>
+					<DesignActionUpdateNode id="1213" updAt="$PERSISTENT/Root/environment/runsCount,
+$PERSISTENT/Root/gpsStatus/GPS_on" resOf="0"/>
+					<DesignActionUpdateNode id="1500" updAt="$PERSISTENT/Root/mainDisplay/source" resOf="&apos;Saved value&apos;"/>
+					<DesignActionUpdateNode id="1864" updAt="$XML1/ns1:gpx/ns1:metadata/ns1:link/ns1:text" resOf="concat( &apos;Simple gpx template for MobileTogether with data captured by: &apos;,$PERSISTENT/Root/environment/device_platform )"/>
+				</children>
+			</DesignActionGroup>
+			<DesignActionGroup id="1038" name="Get Current Location">
+				<children>
+					<DesignActionComment id="1597" comment="Copy current to previous"/>
+					<DesignActionUpdateNode id="1595" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevDisplayLat" resOf="$PERSISTENT/Root/mainDisplay/displayLat"/>
+					<DesignActionUpdateNode id="1594" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevDisplayLong" resOf="$PERSISTENT/Root/mainDisplay/displayLong"/>
+					<DesignActionUpdateNode id="1593" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevCaptureTime" resOf="$PERSISTENT/Root/mainDisplay/latestCaptureTime"/>
+					<DesignActionUpdateNode id="1592" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevElevation" resOf="$PERSISTENT/Root/mainDisplay/USGSelevation"/>
+					<DesignActionUpdateNode id="1856" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevUnits" resOf="$PERSISTENT/Root/environment/units"/>
+					<DesignActionUpdateNode id="1604" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation" resOf="$PERSISTENT/Root/mainDisplay/currentGeolocation"/>
+					<DesignActionComment id="1598" comment="Update current"/>
+					<DesignActionUpdateNode id="1600" updAt="$PERSISTENT/Root/mainDisplay/displayLat,
+$PERSISTENT/Root/mainDisplay/displayLong,
+$PERSISTENT/Root/mainDisplay/USGSelevation" resOf="&apos;&apos;"/>
+					<DesignActionGeolocationRead id="1596" needsClient="0" readAction="LatLngAddress"/>
+					<DesignActionUpdateNode id="1608" needsClient="1" updAt="$PERSISTENT/Root/mainDisplay/currentGeolocation" resOf="$GEOLOCATION/Root/Location/@Geolocation"/>
+					<DesignActionUpdateNode id="1599" needsClient="1" updAt="$PERSISTENT/Root/mainDisplay/displayLat" resOf="$GEOLOCATION/Root/Location/@Latitude"/>
+					<DesignActionUpdateNode id="1047" needsClient="1" updAt="$PERSISTENT/Root/mainDisplay/displayLong" resOf="$GEOLOCATION/Root/Location/@Longitude"/>
+					<DesignActionUpdateNode id="1170" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/prevCaptureTime" resOf="$PERSISTENT/Root/mainDisplay/latestCaptureTime"/>
+					<DesignActionUpdateNode id="1171" updAt="$PERSISTENT/Root/mainDisplay/latestCaptureTime" resOf="current-dateTime()"/>
+					<DesignActionUpdateNode id="1214" updAt="$PERSISTENT/Root/environment/runsCount" resOf="$PERSISTENT/Root/environment/runsCount + 1"/>
+					<DesignActionGroupRef id="1612" groupRef="1611"/>
+					<DesignActionCondition id="1548" condition="$PERSISTENT/Root/gpsStatus/GPS_on = 2">
+						<children>
+							<DesignActionConditionTrue id="1549">
+								<children>
+									<DesignActionUpdateNode id="1550" updAt="$PERSISTENT/Root/mainDisplay/source" resOf="&apos;GPS only&apos;"/>
+								</children>
+							</DesignActionConditionTrue>
+						</children>
+					</DesignActionCondition>
+					<DesignActionCondition id="1551" condition="$PERSISTENT/Root/gpsStatus/GPS_on = 3">
+						<children>
+							<DesignActionConditionTrue id="1552">
+								<children>
+									<DesignActionUpdateNode id="1553" updAt="$PERSISTENT/Root/mainDisplay/source" resOf="&apos;GPS + Network&apos;"/>
+								</children>
+							</DesignActionConditionTrue>
+						</children>
+					</DesignActionCondition>
+				</children>
+			</DesignActionGroup>
+			<DesignActionGroup id="1180" name="Get USGS elevation">
+				<children>
+					<DesignActionCondition id="1181" needsClient="1" condition="starts-with( $GEOLOCATION/Root/Address/@CountryCode ,  &apos;US&apos; )">
+						<children>
+							<DesignActionConditionTrue id="1182">
+								<children>
+									<DesignActionReloadData id="1183" reloadRef="1049"/>
+									<DesignActionUpdateNode id="1184" updAt="$PERSISTENT/Root/mainDisplay/USGSelevation" resOf="$HTTP_USGS_REST/USGS_Elevation_Point_Query_Service/Elevation_Query/Elevation"/>
+								</children>
+							</DesignActionConditionTrue>
+							<DesignActionConditionFalse id="1185">
+								<children>
+									<DesignActionUpdateNode id="1186" updAt="$PERSISTENT/Root/mainDisplay/USGSelevation" resOf="&apos;Unavailable&apos;"/>
+								</children>
+							</DesignActionConditionFalse>
+						</children>
+					</DesignActionCondition>
+				</children>
+			</DesignActionGroup>
+			<DesignActionGroup id="1611" name="Get Distance to Previous">
+				<children>
+					<DesignActionUpdateNode id="1609" updAt="$PERSISTENT/Root/mainDisplay/previousLocation/distPrevToCurrent" resOf="if ( $PERSISTENT/Root/environment/units = &apos;Feet&apos; ) then  
+   geolocation-distance-mi(
+   $PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation,
+   $PERSISTENT/Root/mainDisplay/currentGeolocation )
+ else 
+   geolocation-distance-km(
+   $PERSISTENT/Root/mainDisplay/previousLocation/prevGeolocation,
+   $PERSISTENT/Root/mainDisplay/currentGeolocation )"/>
+				</children>
+			</DesignActionGroup>
+			<DesignActionGroup id="1797" name="Add point to GPX file">
+				<children>
+					<DesignActionCondition id="2039" condition="( contains( $PERSISTENT/Root/environment/device_platform ,  &apos;iOS&apos; ) or contains( $PERSISTENT/Root/environment/device_platform, &apos;Android&apos; )  )">
+						<children>
+							<DesignActionConditionTrue id="2040">
+								<children>
+									<DesignActionUpdateNode id="2031" updAt="$PERSISTENT/Root/gpxFileNodes/trkpt/@lat" resOf="format-number( $PERSISTENT/Root/mainDisplay/displayLat,  &apos;##.######&apos; )"/>
+									<DesignActionUpdateNode id="2032" updAt="$PERSISTENT/Root/gpxFileNodes/trkpt/@lon" resOf="format-number( $PERSISTENT/Root/mainDisplay/displayLong ,  &apos;##.######&apos; )"/>
+									<DesignActionComment id="2033" comment="Need to update elevation to make sure it exists and is in meters"/>
+									<DesignActionCondition id="2034" condition="$PERSISTENT/Root/mainDisplay/USGSelevation != &apos;Unavailable&apos;">
+										<children>
+											<DesignActionConditionTrue id="2035">
+												<children>
+													<DesignActionUpdateNode id="2036" updAt="$PERSISTENT/Root/gpxFileNodes/trkpt/ele" resOf="format-number(ConvertToMeters( $PERSISTENT/Root/mainDisplay/USGSelevation) ,  &apos;######.###&apos; )"/>
+												</children>
+											</DesignActionConditionTrue>
+										</children>
+									</DesignActionCondition>
+									<DesignActionUpdateNode id="2037" updAt="$PERSISTENT/Root/gpxFileNodes/trkpt/time" resOf="$PERSISTENT/Root/mainDisplay/latestCaptureTime"/>
+									<DesignActionAppendNode id="2038" appAt="$XML1/ns1:gpx/ns1:trk/ns1:trkseg" resOf="$PERSISTENT/Root/gpxFileNodes/trkpt"/>
+								</children>
+							</DesignActionConditionTrue>
+						</children>
+					</DesignActionCondition>
+				</children>
+			</DesignActionGroup>
+		</children>
+	</ActionGroupRoot>
+	<XPathFunctionsRoot id="267">
+		<children>
+			<DesignXPathFunction id="1540" xpath="declare function CurrentState()
+{
+	if 
+       ( $PERSISTENT/Root/environment/runsCount &gt; 0 ) 
+    then  
+       ( $PERSISTENT/Root/gpsStatus/GPS_on + 1 )
+    else 
+       ( $PERSISTENT/Root/gpsStatus/GPS_on )
+
+}"/>
+			<DesignXPathFunction id="1808" xpath="declare function ConvertToMeters($a)
+{
+    if ( $PERSISTENT/Root/mainDisplay/previousLocation/prevUnits = &apos;Feet&apos; ) 
+    then $a * 0.3048 
+    else $a
+}"/>
+			<DesignXPathFunction id="1843" xpath="declare function ConvertToFeet($a)
+{
+	if ( $PERSISTENT/Root/mainDisplay/previousLocation/prevUnits = &apos;Meters&apos; ) 
+    then $a * 3.2808 
+    else $a
+}"/>
+		</children>
+	</XPathFunctionsRoot>
+	<PageXMLNamespaceRoot id="37">
+		<children>
+			<PageXMLNamespace id="38" defNS="1"/>
+			<PageXMLNamespace id="1755" prefix="ns1" uri="http://www.topografix.com/GPX/1/1"/>
+			<PageXMLNamespace id="1756" prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance"/>
+		</children>
+	</PageXMLNamespaceRoot>
+	<PageXMLPersistentRoot id="39" name="PERSISTENT">
+		<children>
+			<PageXMLElement id="40" name="Root">
+				<children>
+					<PageXMLElement id="2092" name="environment" mustExist="1">
+						<children>
+							<PageXMLElement id="1859" name="device_platform" mustExist="1" default="Unknown device"/>
+							<PageXMLElement id="1212" name="runsCount" mustExist="1" default="0"/>
+							<PageXMLElement id="1215" name="units" mustExist="1" default="Feet"/>
+							<PageXMLElement id="1985" name="returnFromFilesPage" mustExist="1" default="0"/>
+							<PageXMLElement id="2111" name="mapZoom" mustExist="1" default="15"/>
+						</children>
+					</PageXMLElement>
+					<PageXMLElement id="2093" name="mainDisplay" mustExist="1">
+						<children>
+							<PageXMLElement id="1605" name="currentGeolocation" mustExist="1" default="42.5586 -70.883"/>
+							<PageXMLElement id="983" name="displayLat" mustExist="1" default="42.5586"/>
+							<PageXMLElement id="984" name="displayLong" mustExist="1" default="-70.883"/>
+							<PageXMLElement id="985" name="showAddress" mustExist="1" default="false"/>
+							<PageXMLElement id="1000" name="latestCaptureTime" mustExist="1" default="2015-12-14T11:12:44-05:00"/>
+							<PageXMLElement id="1081" name="USGSelevation" mustExist="1" default="Unavailable"/>
+							<PageXMLElement id="1425" name="source" mustExist="1" default="Saved from last run"/>
+							<PageXMLElement id="2094" name="previousLocation" mustExist="1">
+								<children>
+									<PageXMLElement id="1589" name="prevDisplayLat" mustExist="1" default="42.5586"/>
+									<PageXMLElement id="1590" name="prevDisplayLong" mustExist="1" default="42.5586"/>
+									<PageXMLElement id="1001" name="prevCaptureTime" mustExist="1" default="2015-12-14T11:12:40-05:00"/>
+									<PageXMLElement id="1591" name="prevElevation" mustExist="1"/>
+									<PageXMLElement id="1855" name="prevUnits" mustExist="1" default="&apos;Feet&apos;"/>
+									<PageXMLElement id="1601" name="distPrevToCurrent" mustExist="1" default="0"/>
+									<PageXMLElement id="1603" name="prevGeolocation" mustExist="1" default="42.5586 -70.883"/>
+								</children>
+							</PageXMLElement>
+						</children>
+					</PageXMLElement>
+					<PageXMLElement id="2095" name="gpsStatus" mustExist="1">
+						<children>
+							<PageXMLElement id="1501" name="GPS_on" mustExist="1" default="0"/>
+							<PageXMLElement id="1907" name="capturing" mustExist="1" default="0"/>
+						</children>
+					</PageXMLElement>
+					<PageXMLElement id="2096" name="gpxFileNodes" mustExist="1">
+						<children>
+							<PageXMLElement id="1847" name="trkseg" mustExist="1"/>
+							<PageXMLElement id="1734" name="trkpt">
+								<children>
+									<PageXMLAttribute id="1735" name="lat" mustExist="1"/>
+									<PageXMLAttribute id="1736" name="lon" mustExist="1"/>
+									<PageXMLElement id="1737" name="ele" mustExist="1"/>
+									<PageXMLElement id="1738" name="time" mustExist="1"/>
+								</children>
+							</PageXMLElement>
+						</children>
+					</PageXMLElement>
+				</children>
+			</PageXMLElement>
+		</children>
+	</PageXMLPersistentRoot>
+	<PageXMLRootGeolocation id="631" name="GEOLOCATION" keepDataOn="client">
+		<children>
+			<PageXMLElement id="632" name="Root">
+				<children>
+					<PageXMLElement id="633" name="Location">
+						<children>
+							<PageXMLAttribute id="634" name="Provider"/>
+							<PageXMLAttribute id="635" name="Latitude"/>
+							<PageXMLAttribute id="636" name="Longitude"/>
+							<PageXMLAttribute id="637" name="Geolocation"/>
+							<PageXMLAttribute id="638" name="Altitude"/>
+							<PageXMLAttribute id="639" name="AccuracyVertical"/>
+							<PageXMLAttribute id="640" name="AccuracyHorizontal"/>
+							<PageXMLAttribute id="641" name="Speed"/>
+							<PageXMLAttribute id="642" name="Time"/>
+							<PageXMLAttribute id="643" name="MagneticHeading"/>
+						</children>
+					</PageXMLElement>
+					<PageXMLElement id="644" name="Address">
+						<children>
+							<PageXMLAttribute id="645" name="Locality"/>
+							<PageXMLAttribute id="646" name="SubLocality"/>
+							<PageXMLAttribute id="647" name="CountryName"/>
+							<PageXMLAttribute id="648" name="CountryCode"/>
+							<PageXMLAttribute id="649" name="PostalCode"/>
+							<PageXMLAttribute id="650" name="AdminArea"/>
+							<PageXMLAttribute id="651" name="SubAdminArea"/>
+							<PageXMLAttribute id="652" name="FeatureName"/>
+							<PageXMLAttribute id="653" name="Thoroughfare"/>
+							<PageXMLAttribute id="654" name="SubThoroughfare"/>
+							<PageXMLAttribute id="655" name="Phone"/>
+							<PageXMLAttribute id="656" name="Url"/>
+							<PageXMLAttribute id="657" name="Premises"/>
+							<PageXMLElement id="658" name="AddressLine"/>
+						</children>
+					</PageXMLElement>
+				</children>
+			</PageXMLElement>
+		</children>
+	</PageXMLRootGeolocation>
+	<PageXMLRoots id="262">
+		<children>
+			<PageXMLRootHttp id="1049" name="HTTP_USGS_REST" readOnlyXML="1">
+				<children>
+					<PageXMLElement id="1098" name="USGS_Elevation_Point_Query_Service" from="xml">
+						<children>
+							<PageXMLElement id="1099" name="Elevation_Query" from="xml">
+								<children>
+									<PageXMLElement id="1100" name="x" from="xml"/>
+									<PageXMLElement id="1101" name="y" from="xml"/>
+									<PageXMLElement id="1102" name="Data_Source" from="xml"/>
+									<PageXMLElement id="1103" name="Elevation" from="xml"/>
+									<PageXMLElement id="1104" name="Units" from="xml"/>
+								</children>
+							</PageXMLElement>
+						</children>
+					</PageXMLElement>
+				</children>
+				<HttpSettings so="1" id="1051" url_so="http://ned.usgs.gov/epqs/pqs.php?x={long}&amp;y={lat}&amp;units={user_choice}&amp;output=xml" type_so="REST" returnsNewXML_so="1">
+					<Params>
+						<param name="long" type="string" value="$PERSISTENT/Root/mainDisplay/displayLong" valueType="XPath" location="URLTemplate" placeholder="x"/>
+						<param name="lat" type="string" value="$PERSISTENT/Root/mainDisplay/displayLat" valueType="XPath" location="URLTemplate" placeholder="y"/>
+						<param name="user_choice" type="string" value="$PERSISTENT/Root/environment/units" valueType="XPath" location="URLTemplate"/>
+					</Params>
+				</HttpSettings>
+			</PageXMLRootHttp>
+			<PageXMLRootXML id="1781" name="XML1" persistOnClient="1" hasUrl="1">
+				<children>
+					<PageXMLElement id="1782" name="ns1:gpx" from="xml">
+						<children>
+							<PageXMLAttribute id="1783" name="xsi:schemaLocation" from="xml"/>
+							<PageXMLAttribute id="1784" name="version" from="xml"/>
+							<PageXMLAttribute id="1785" name="creator" from="xml"/>
+							<PageXMLElement id="1786" name="ns1:metadata" from="xml">
+								<children>
+									<PageXMLElement id="1787" name="ns1:link" from="xml">
+										<children>
+											<PageXMLAttribute id="1788" name="href" from="xml"/>
+											<PageXMLElement id="1789" name="ns1:text" from="xml"/>
+										</children>
+									</PageXMLElement>
+									<PageXMLElement id="1790" name="ns1:time" from="xml"/>
+								</children>
+							</PageXMLElement>
+							<PageXMLElement id="1791" name="ns1:trk" from="xml">
+								<children>
+									<PageXMLElement id="1792" name="ns1:name" from="xml"/>
+									<PageXMLElement id="1793" name="ns1:trkseg" from="xml"/>
+								</children>
+							</PageXMLElement>
+						</children>
+					</PageXMLElement>
+				</children>
+				<DefaultFile so="1" id="1794" url="..\51202 geolocation demo app\gpx_example1.xml" deployable_so="1796"/>
+			</PageXMLRootXML>
+		</children>
+	</PageXMLRoots>
+	<WorkflowRoot id="33">
+		<children>
+			<WorkflowPageRef id="34" page="7"/>
+			<WorkflowPageRef id="1983" page="1809"/>
+		</children>
+	</WorkflowRoot>
+	<GlobalVariables id="41">
+		<children>
+			<GlobalVariable id="42" sysVar="MT_Android" idxIcon_so="0"/>
+			<GlobalVariable id="43" sysVar="MT_iOS" idxIcon_so="1"/>
+			<GlobalVariable id="44" sysVar="MT_Browser" idxIcon_so="2"/>
+			<GlobalVariable id="45" sysVar="MT_iPad" idxIcon_so="3"/>
+			<GlobalVariable id="46" sysVar="MT_Windows" idxIcon_so="6"/>
+			<GlobalVariable id="47" sysVar="MT_WindowsPhone" idxIcon_so="7"/>
+			<GlobalVariable id="48" sysVar="MT_DeviceWidth"/>
+			<GlobalVariable id="49" sysVar="MT_DeviceHeight"/>
+			<GlobalVariable id="50" sysVar="MT_DPIX"/>
+			<GlobalVariable id="51" sysVar="MT_DPIY"/>
+			<GlobalVariable id="52" sysVar="MT_Landscape" idxIcon_so="4"/>
+			<GlobalVariable id="53" sysVar="MT_Portrait" idxIcon_so="5"/>
+			<GlobalVariable id="54" sysVar="MT_CanvasX"/>
+			<GlobalVariable id="55" sysVar="MT_CanvasY"/>
+			<GlobalVariable id="56" sysVar="MT_ClientLanguage"/>
+			<GlobalVariable id="57" sysVar="MT_TelephonyAvailable" idxIcon_so="20"/>
+			<GlobalVariable id="58" sysVar="MT_SMSAvailable" idxIcon_so="21"/>
+			<GlobalVariable id="59" sysVar="MT_ButtonTextColor"/>
+			<GlobalVariable id="60" sysVar="MT_ButtonBackgroundColor"/>
+			<GlobalVariable id="61" sysVar="MT_EditFieldTextColor"/>
+			<GlobalVariable id="62" sysVar="MT_EditFieldBackgroundColor"/>
+			<GlobalVariable id="63" sysVar="MT_LabelTextColor"/>
+			<GlobalVariable id="64" sysVar="MT_LabelBackgroundColor"/>
+			<GlobalVariable id="65" sysVar="MT_PageBackgroundColor"/>
+			<GlobalVariable id="66" sysVar="MT_FirstPageLoad"/>
+			<GlobalVariable id="67" sysVar="MT_TargetNode"/>
+			<GlobalVariable id="68" sysVar="MT_ControlKind"/>
+			<GlobalVariable id="69" sysVar="MT_ControlName"/>
+			<GlobalVariable id="70" sysVar="MT_ControlNode"/>
+			<GlobalVariable id="71" sysVar="MT_PageName"/>
+			<GlobalVariable id="72" sysVar="MT_UserName"/>
+			<GlobalVariable id="73" sysVar="MT_UserRoles"/>
+			<GlobalVariable id="74" sysVar="MT_ControlValue"/>
+			<GlobalVariable id="75" sysVar="MT_ControlValueBeforeChange"/>
+			<GlobalVariable id="76" sysVar="MT_SimulationMode"/>
+			<GlobalVariable id="77" sysVar="MT_DBExecute_Result"/>
+			<GlobalVariable id="78" sysVar="MT_CameraAvailable"/>
+			<GlobalVariable id="79" sysVar="MT_GeolocationAvailable"/>
+			<GlobalVariable id="80" sysVar="MT_InputParameters"/>
+			<GlobalVariable id="81" sysVar="MT_HTTPExecute_Result"/>
+			<GlobalVariable id="82" sysVar="MT_ServerConnectionErrorLocation"/>
+		</children>
+	</GlobalVariables>
+	<DeployableFiles so="1" id="342">
+		<children>
+			<DeployableFile id="1796" deploy="1"/>
+		</children>
+	</DeployableFiles>
+	<CustomerAppSettings so="1" id="32"/>
+</MobileTogetherDesign>
