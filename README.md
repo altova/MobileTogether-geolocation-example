@@ -9,5 +9,7 @@ Open the file geolocation-demo-app.mtd in the MobileTogether Designer to examine
 
 Download the MobileTogether Mobile App for your device at the app store and connect to the MobileTogether Demo Server to run more demo apps.
 
+The Driving Simulation XML file lets you simulate a moving mobile device in the MobileTogether Designer.
+
 Altova MobileTogether is a cross-platform mobile development framework for building data-centric apps. MobileTogether allows you to build one solution for all platforms -- in record time -- and deliver it to end users on their devices of choice.
 
