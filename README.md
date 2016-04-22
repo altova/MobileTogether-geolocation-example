@@ -13,3 +13,11 @@ The Driving Simulation XML file lets you simulate a moving mobile device in the 
 
 Altova MobileTogether is a cross-platform mobile development framework for building data-centric apps. MobileTogether allows you to build one solution for all platforms -- in record time -- and deliver it to end users on their devices of choice.
 
+Changes in this version:
+ * Updated to demonstrate new features
+ * The REST call is enhanced with Try/Catch error handling for server connection errors
+ * If the elevation is not available from USGS, then the default device elevation is used, when available
+ * Inconsistency in handling GPX namespace is corrected
+ * A new map option draws the default route between the current and previous captured locations -- this is not necessarily the route the user traveled
+
+
